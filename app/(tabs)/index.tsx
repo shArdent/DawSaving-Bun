@@ -1,26 +1,21 @@
-import {
-  Text,
-  StyleSheet,
-  Pressable,
-  TextInput,
-  View,
-  Button,
-} from 'react-native';
+import { Text, StyleSheet, Pressable, TextInput, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native-gesture-handler';
 import { tabungan, siswa } from '@/db/schema';
 import db from '@/constants/dbConn';
-import { siswaDisplayType } from '@/type/siswaType';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from '@/drizzle/migrations';
 import { eq } from 'drizzle-orm';
+import { siswaDetail } from '@/type/siswaType';
+import DetailSiswaCard from '@/components/DetailSiswaCard';
+import DetailSiswaCardPopMenu from '@/components/DetailSiswaCardPopMenu';
 
 const Page = () => {
-  const [students, setStudents] = useState<siswaDisplayType[]>([]);
+  const [students, setStudents] = useState<siswaDetail[]>([]);
   const [filteredStudents, setFilteredStudents] =
-    useState<siswaDisplayType[]>(students);
+    useState<siswaDetail[]>(students);
 
   const router = useRouter();
   const { success, error } = useMigrations(db, migrations);
@@ -28,14 +23,14 @@ const Page = () => {
   const handleSearch = (e: string) => {
     const query = e.trim().toLowerCase();
     setFilteredStudents(
-      students.filter((siswa: siswaDisplayType) =>
+      students.filter((siswa: siswaDetail) =>
         siswa.name.toLowerCase().includes(query)
       )
     );
   };
 
   const init = async () => {
-    const dataSiswa: siswaDisplayType[] = await db
+    const dataSiswa: siswaDetail[] = await db
       .select({
         id: siswa.id,
         name: siswa.name,
@@ -55,7 +50,7 @@ const Page = () => {
   }, [success]);
 
   return (
-    <View style={{ flex: 1, padding: 10, backgroundColor: 'transparent' }}>
+    <View style={{ flex: 1, padding: 10, backgroundColor: 'black' }}>
       <Pressable
         style={styles.AddNew}
         onPress={async () =>
@@ -85,6 +80,7 @@ const Page = () => {
         />
         <Ionicons name="search" size={20} color="black" style={styles.icon} />
       </View>
+        
       <View>
         {filteredStudents.length === 0 ? (
           <View style={{ alignItems: 'center', marginTop: 100 }}>
@@ -95,25 +91,11 @@ const Page = () => {
             data={filteredStudents}
             contentContainerStyle={{ gap: 12, paddingTop: 67, width: '100%' }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Pressable
-                style={styles.child}
-                onPress={() =>
-                  router.navigate({
-                    pathname: '/DetailSiswa',
-                    params: {
-                      id: item.id,
-                      name : item.name
-                    },
-                  })
-                }
-              >
-                <Text>{item.name}</Text>
-              </Pressable>
-            )}
+            renderItem={({ item }) => <DetailSiswaCard siswa={item} />}
           />
         )}
       </View>
+      <DetailSiswaCardPopMenu />
     </View>
   );
 };
@@ -121,15 +103,6 @@ const Page = () => {
 export default Page;
 
 const styles = StyleSheet.create({
-  child: {
-    gap: 10,
-    backgroundColor: '#FFF',
-    elevation: 3,
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 200,
-  },
   AddNew: {
     position: 'absolute',
     flexDirection: 'row',

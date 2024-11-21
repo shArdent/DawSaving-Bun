@@ -3,9 +3,10 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import { MenuProvider } from 'react-native-popup-menu';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -45,18 +46,23 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <GestureHandlerRootView>
-      <SafeAreaView
-        style={{
-          flex: 1,
-        }}
-      >
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="AddNew" options={{ headerShown: false }} />
-          <Stack.Screen name="DetailSiswa" options={{  title: "Detail Siswa" }}/>
-        </Stack>
-      </SafeAreaView>
-    </GestureHandlerRootView>
+    <MenuProvider>
+      <GestureHandlerRootView>
+        <SafeAreaView
+          style={{
+            flex: 1,
+          }}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="AddNew" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="DetailSiswa"
+              options={{ title: 'Detail Siswa' }}
+            />
+          </Stack>
+        </SafeAreaView>
+      </GestureHandlerRootView>
+    </MenuProvider>
   );
 }
