@@ -12,9 +12,8 @@ const DetailSiswaCardPopMenu = () => {
       style={{
         height: 50,
         width: 100,
-        top: 0,
-        right: 0,
-
+        top: 10,
+        right: 10,
         backgroundColor: 'red',
         position: 'absolute',
       }}
@@ -25,13 +24,12 @@ const DetailSiswaCardPopMenu = () => {
             position: 'absolute',
             right: 0,
             top: 0,
-
-            zIndex: 999,
             backgroundColor: 'green',
+            zIndex: 999,
           },
         }}
       >
-        <DotMenu width={50} height={50} />
+        <DotMenu width={25} height={25} />
       </MenuTrigger>
       <MenuOptions
         customStyles={{

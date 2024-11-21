@@ -5,52 +5,57 @@ import { useRouter } from 'expo-router';
 import DotMenu from '@/assets/icons/DotMenu.svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import DetailSiswaCardPopMenu from './DetailSiswaCardPopMenu';
+import { text } from 'drizzle-orm/mysql-core';
 
-const DetailSiswaCard = ({ siswa }: { siswa: siswaDetail }) => {
+const DetailSiswaCard = ({
+  siswa,
+  index,
+}: {
+  siswa: siswaDetail;
+  index: number;
+}) => {
   const router = useRouter();
 
-  // const randomGradient: string[][] = [
-  //   ['#00C6FB', '#005BEA'],
-  //   ['#00C6FB', 'rgba(255, 112, 140, 0.93)'],
-  //   ['#F76174', 'rgba(79, 114, 229, 0.93)'],
-  // ];
+  const gradient: string[][] = [
+    ['#F8A39B', '#394DB3'],
+    ['#394DB3', '#280594'],
+    ['#280594', '#F8A39B'],
+    ['#F8A39B', '#FFC120'],
+    ['#FFC120', '#F8A39B'],
+  ];
 
   return (
-    <View
-      // colors={
-      //   randomGradient[Math.floor(Math.random() * randomGradient.length)] as any
-      // }
+    <LinearGradient
+      colors={gradient[index % gradient.length] as any}
       style={styles.linear}
+      key={index}
     >
-      <DetailSiswaCardPopMenu />
-
-      <View
+      <Pressable
         style={styles.container}
-        // onPress={() =>
-        //   router.navigate({
-        //     pathname: '/DetailSiswa',
-        //     params: {
-        //       id: siswa.id,
-        //       name: siswa.name,
-        //     },
-        //   })
-        // }
+        onPress={() =>
+          router.navigate({
+            pathname: '/DetailSiswa',
+            params: {
+              id: siswa.id,
+              name: siswa.name,
+            },
+          })
+        }
       >
         <View style={{ gap: 16 }}>
           <Text style={styles.textTitle}>{siswa.name}</Text>
           <Text style={styles.textDesc}>{siswa.class}</Text>
         </View>
         <View style={styles.rightContent}>
-          <Text style={styles.textDesc}>
-            Rp.{' '}
+          <Text style={styles.textCurrency}>
             {siswa.amount.toLocaleString('id-ID', {
               style: 'currency',
               currency: 'IDR',
             })}
           </Text>
         </View>
-      </View>
-    </View>
+      </Pressable>
+    </LinearGradient>
   );
 };
 
@@ -68,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     flexDirection: 'row',
+    height: '100%',
     justifyContent: 'space-between',
     zIndex: 1,
   },
@@ -79,8 +85,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
   },
+  textCurrency: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   rightContent: {
-    justifyContent: 'flex-end',
-    height: '100%',
+    justifyContent: 'center',
+    height: 'auto',
   },
 });
