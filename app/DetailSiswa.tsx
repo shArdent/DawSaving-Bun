@@ -17,18 +17,6 @@ const DetailSiswa = () => {
   const [visibleSetor, setVisibleSetor] = useState<boolean>(false);
   const [visibleTarik, setVisibleTarik] = useState<boolean>(false);
 
-  const getTrigger = async () => {
-    const data = await db.getAllAsync(
-      "SELECT name FROM sqlite_master WHERE type = 'trigger'"
-    );
-
-    console.log(data);
-  };
-
-  const deleteTrigger = async () => {
-    await db.execAsync('DROP TRIGGER IF EXISTS log_menabung');
-  };
-
   const getData = async () => {
     const data = await db.getFirstAsync(
       `SELECT * FROM siswa JOIN tabungan ON siswa.id = tabungan.siswaId WHERE tabungan.siswaId = ${id}`
@@ -136,7 +124,7 @@ const DetailSiswa = () => {
               <Text style={styles.buttonText}>TARIK</Text>
             </Pressable>
           </View>
-          <Pressable style={{ height: 'auto' }} onPress={() => deleteTrigger()}>
+          <Pressable style={{ height: 'auto' }} onPress={() => {}}>
             <LinearGradient
               colors={['#4CA9DF', '#292E91']}
               style={styles.buttonContainer}
