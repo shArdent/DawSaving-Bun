@@ -157,6 +157,7 @@ const DetailSiswa = () => {
           visible={visibleTarik}
           setVisible={setVisibleTarik}
           id={Number(id)}
+          currTabungan={dataSiswa?.amount as number}
         />
       </View>
     </View>
