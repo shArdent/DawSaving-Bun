@@ -1,9 +1,7 @@
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { openDatabaseSync } from "expo-sqlite";
+import * as SQLite from "expo-sqlite";
 
-const openDb = () => {
-    const db = openDatabaseSync("test1.db");
-    db.execSync(`CREATE TABLE IF NOT EXISTS siswa (
+const db = SQLite.openDatabaseSync("test1.db");
+db.execSync(`CREATE TABLE IF NOT EXISTS siswa (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT NOT NULL,
         nisn TEXT NOT NULL,
@@ -32,10 +30,10 @@ const openDb = () => {
     END;
 
     CREATE TRIGGER IF NOT EXISTS 'log_menabung' AFTER UPDATE ON 'tabungan' BEGIN
-        INSERT INTO 'saving_log' ('siswaId', 'addedAmount', 'oldAmount', 'newAmount', 'createdAt') VALUES (new.siswaId, new.amount - old.amount, old.amount, new.amount, DATETIME('now'));
+        INSERT INTO 'saving_log' ('siswaId', 'tabunganId', 'addedAmount', 'oldAmount', 'newAmount', 'createdAt') VALUES (new.siswaId, old.id, new.amount - old.amount, old.amount, new.amount, DATETIME('now'));
     END;
     `);
-    db.execSync(`CREATE TRIGGER IF NOT EXISTS 'add_tabungan' AFTER INSERT ON 'siswa' BEGIN
+db.execSync(`CREATE TRIGGER IF NOT EXISTS 'add_tabungan' AFTER INSERT ON 'siswa' BEGIN
         INSERT INTO 'tabungan' ('siswaId', 'amount') VALUES (new.id, 0);
     END;
 
@@ -43,9 +41,5 @@ const openDb = () => {
         INSERT INTO 'saving_log' ('siswaId', 'addedAmount', 'oldAmount', 'newAmount', 'createdAt') VALUES (new.siswaId, new.amount - old.amount, old.amount, new.amount, DATETIME('now'));
     END;
         `);
-    return db;
-}
-
-const db = drizzle(openDb());
 
 export default db;

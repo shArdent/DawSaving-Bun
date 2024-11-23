@@ -40,7 +40,7 @@ const AddSiswaForm = () => {
         },
         {
           text: 'Simpan',
-          onPress: addNewSiswaHandler(data, router, errors) as any,
+          onPress: async () => await addNewSiswaHandler(data, router, errors),
         },
       ]
     );
@@ -104,27 +104,6 @@ const AddSiswaForm = () => {
                 onChange={onChange}
                 onBlur={onBlur}
                 placeholder="Kelas Siswa"
-                keyboardType={'number-pad'}
-              />
-              {errors.class && (
-                <Text style={styles.errorText}>
-                  {errors.class.message as string}
-                </Text>
-              )}
-            </View>
-          )}
-        />
-        <Controller
-          control={control}
-          name="class"
-          render={({ field: { onChange, value, onBlur } }) => (
-            <View style={styles.fieldInput}>
-              <InputField
-                label="Kelas"
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                placeholder="Kelas Siswa"
               />
               {errors.class && (
                 <Text style={styles.errorText}>
@@ -148,10 +127,15 @@ const AddSiswaForm = () => {
           alignSelf: 'flex-end',
           marginTop: 50,
         }}
-        onPress={handleSubmit(onSubmit)}
+        onPress={() => handleSubmit(onSubmit)()}
       >
         <Text
-          style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize : 14 }}
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            fontSize: 14,
+          }}
         >
           Simpan
         </Text>
@@ -167,7 +151,7 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 12,
   },
-  fieldInput : {
-    gap : 10
-  }
+  fieldInput: {
+    gap: 10,
+  },
 });

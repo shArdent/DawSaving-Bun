@@ -1,4 +1,11 @@
-import { Text, StyleSheet, Pressable, TextInput, View } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Pressable,
+  TextInput,
+  View,
+  RefreshControl,
+} from 'react-native';
 import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -9,6 +16,7 @@ import { init } from '@/db/query';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Page = () => {
+  const [refreshing, setRefreshing] = useState<boolean>(true);
   const [students, setStudents] = useState<siswaDetail[]>([]);
   const [filteredStudents, setFilteredStudents] =
     useState<siswaDetail[]>(students);
@@ -26,7 +34,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    init(setStudents, setFilteredStudents);
+    init(setStudents, setFilteredStudents, setRefreshing);
   }, []);
 
   return (
@@ -73,6 +81,12 @@ const Page = () => {
             renderItem={({ item, index }) => (
               <DetailSiswaCard siswa={item} index={index} key={index} />
             )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => init(setStudents, setFilteredStudents, setRefreshing)}
+              />
+            }
           />
         )}
       </View>

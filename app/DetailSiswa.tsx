@@ -9,6 +9,7 @@ import SetorDialog from '@/components/SetorDialog';
 import TarikDialog from '@/components/TarikDialog';
 import Header from '@/components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 const DetailSiswa = () => {
   const { id, name } = useLocalSearchParams();
   const [dataSiswa, setDataSiswa] = useState<siswaDetail | null>(null);
@@ -16,20 +17,24 @@ const DetailSiswa = () => {
   const [visibleSetor, setVisibleSetor] = useState<boolean>(false);
   const [visibleTarik, setVisibleTarik] = useState<boolean>(false);
 
-  const getData = async () => {
-    const data = await db
-      .select({
-        id: siswa.id,
-        name: siswa.name,
-        nisn: siswa.nisn,
-        class: siswa.class,
-        amount: tabungan.amount,
-      })
-      .from(siswa)
-      .innerJoin(tabungan, eq(siswa.id, tabungan.siswaId))
-      .where(eq(siswa.id, Number(id)));
+  const getTrigger = async () => {
+    const data = await db.getAllAsync(
+      "SELECT name FROM sqlite_master WHERE type = 'trigger'"
+    );
 
-    setDataSiswa(data[0]);
+    console.log(data);
+  };
+
+  const deleteTrigger = async () => {
+    await db.execAsync('DROP TRIGGER IF EXISTS log_menabung');
+  };
+
+  const getData = async () => {
+    const data = await db.getFirstAsync(
+      `SELECT * FROM siswa JOIN tabungan ON siswa.id = tabungan.siswaId WHERE tabungan.siswaId = ${id}`
+    );
+
+    setDataSiswa(data as siswaDetail);
     setIsLoading(false);
   };
 
@@ -47,7 +52,10 @@ const DetailSiswa = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header title={`Detail Siswa ${(name as string).split(' ')[0]}`} showMenu={true} />
+      <Header
+        title={`Detail Siswa ${(name as string).split(' ')[0]}`}
+        showMenu={true}
+      />
 
       <View style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: 24, paddingVertical: 43, gap: 31 }}>
@@ -75,7 +83,7 @@ const DetailSiswa = () => {
             flexDirection: 'row',
             alignItems: 'center',
             height: 1,
-            backgroundColor : 'black'
+            backgroundColor: 'black',
           }}
         ></View>
         <View style={{ paddingHorizontal: 24, paddingVertical: 43, gap: 20 }}>
@@ -128,7 +136,7 @@ const DetailSiswa = () => {
               <Text style={styles.buttonText}>TARIK</Text>
             </Pressable>
           </View>
-          <Pressable style={{ height: 'auto' }}>
+          <Pressable style={{ height: 'auto' }} onPress={() => deleteTrigger()}>
             <LinearGradient
               colors={['#4CA9DF', '#292E91']}
               style={styles.buttonContainer}
@@ -139,8 +147,17 @@ const DetailSiswa = () => {
             </LinearGradient>
           </Pressable>
         </View>
-        <SetorDialog visible={visibleSetor} setVisible={setVisibleSetor} />
-        <TarikDialog visible={visibleTarik} setVisible={setVisibleTarik} />
+        <SetorDialog
+          currTabungan={dataSiswa?.amount as number}
+          visible={visibleSetor}
+          setVisible={setVisibleSetor}
+          id={Number(id)}
+        />
+        <TarikDialog
+          visible={visibleTarik}
+          setVisible={setVisibleTarik}
+          id={Number(id)}
+        />
       </View>
     </View>
   );
