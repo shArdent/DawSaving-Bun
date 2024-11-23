@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -53,12 +53,15 @@ function RootLayoutNav() {
             flex: 1,
           }}
         >
+          <StatusBar barStyle={'dark-content'} />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="AddNew" options={{ headerShown: false }} />
             <Stack.Screen
               name="DetailSiswa"
-              options={{ title: 'Detail Siswa' }}
+              options={{
+                headerShown: false,
+              }}
             />
           </Stack>
         </SafeAreaView>

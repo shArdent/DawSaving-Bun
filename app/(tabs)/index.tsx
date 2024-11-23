@@ -3,72 +3,15 @@ import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native-gesture-handler';
-import { tabungan, siswa } from '@/db/schema';
-import db from '@/constants/dbConn';
-// import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-// import migrations from '@/drizzle/migrations';
-import { eq } from 'drizzle-orm';
 import { siswaDetail } from '@/type/siswaType';
-import DetailSiswaCard from '@/components/DetailSiswaCard';
-import DetailSiswaCardPopMenu from '@/components/DetailSiswaCardPopMenu';
+import DetailSiswaCard from '@/components/detail-siswa/DetailSiswaCard';
+import { init } from '@/db/query';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Page = () => {
   const [students, setStudents] = useState<siswaDetail[]>([]);
   const [filteredStudents, setFilteredStudents] =
     useState<siswaDetail[]>(students);
-
-  const dummy = [
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-    {
-      id: 1,
-      name: 'dummy',
-      nisn: 'dummy',
-      class: 'dummy',
-      amount: 0,
-    },
-  ];
 
   const router = useRouter();
   // const { success, error } = useMigrations(db, migrations);
@@ -82,31 +25,15 @@ const Page = () => {
     );
   };
 
-  const init = async () => {
-    const dataSiswa: siswaDetail[] = await db
-      .select({
-        id: siswa.id,
-        name: siswa.name,
-        nisn: siswa.nisn,
-        class: siswa.class,
-        amount: tabungan.amount,
-      })
-      .from(siswa)
-      .innerJoin(tabungan, eq(siswa.id, tabungan.siswaId));
-
-    setStudents(dataSiswa);
-    setFilteredStudents(dataSiswa);
-  };
-
   useEffect(() => {
-    init();
+    init(setStudents, setFilteredStudents);
   }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <Pressable
         style={styles.AddNew}
-        onPress={async () =>
+        onPress={() =>
           router.navigate({
             pathname: '/AddNew',
           })
@@ -114,8 +41,13 @@ const Page = () => {
       >
         <Ionicons name="add" size={40} color="black" />
       </Pressable>
-      <View style={styles.header}>
-        {/* <LinearGradient colors={['#4CA9DF', 'rgba(41, 46, 145, 0.93)']} /> */}
+
+      <LinearGradient
+        style={styles.header}
+        colors={['#4CA9DF', 'rgba(41, 46, 145, 0.93)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
         <Text style={styles.title}>DawSaving</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -126,7 +58,7 @@ const Page = () => {
           />
           <Ionicons name="search" size={20} color="black" style={styles.icon} />
         </View>
-      </View>
+      </LinearGradient>
 
       <View style={{ flex: 1, marginTop: 16, paddingHorizontal: 24 }}>
         {filteredStudents.length === 0 ? (
@@ -135,10 +67,12 @@ const Page = () => {
           </View>
         ) : (
           <FlatList
-            data={dummy}
+            data={filteredStudents}
             contentContainerStyle={{ gap: 16, width: '100%' }}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => <DetailSiswaCard siswa={item} index={index} key={index} />}
+            renderItem={({ item, index }) => (
+              <DetailSiswaCard siswa={item} index={index} key={index} />
+            )}
           />
         )}
       </View>
@@ -161,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    textAlign : 'center',
+    textAlign: 'center',
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
