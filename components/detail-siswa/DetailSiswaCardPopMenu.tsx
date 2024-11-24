@@ -5,8 +5,11 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import DotMenu from '@/assets/icons/DotMenu.svg';
+import { useRouter } from 'expo-router';
 
-const DetailSiswaCardPopMenu = () => {
+const DetailSiswaCardPopMenu = ({ id }: { id: number }) => {
+  const router = useRouter();
+
   return (
     <Menu>
       <MenuTrigger>
@@ -25,7 +28,10 @@ const DetailSiswaCardPopMenu = () => {
           },
         }}
       >
-        <MenuOption text="Edit" />
+        <MenuOption text="Edit" onSelect={() => router.push({
+          pathname: '/EditSiswa',
+          params: { id },
+        })} />
         <MenuOption text="Hapus" />
       </MenuOptions>
     </Menu>

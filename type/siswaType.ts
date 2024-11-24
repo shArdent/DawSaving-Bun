@@ -1,9 +1,3 @@
-export interface siswaDisplayType {
-    id: number,
-    name: string,
-    class: string,
-    // savings: number
-}
 
 export interface siswaDetail {
     id: number,
@@ -11,4 +5,11 @@ export interface siswaDetail {
     nisn: string,
     class: string
     amount: number
+}
+
+export interface siswa {
+    id: number,
+    name: string,
+    nisn: string,
+    class: string
 }

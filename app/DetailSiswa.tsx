@@ -1,15 +1,12 @@
-import { View, Text, Button, Pressable, StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { siswa, tabungan } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import db from '@/constants/dbConn';
 import { siswaDetail } from '@/type/siswaType';
-import SetorDialog from '@/components/SetorDialog';
-import TarikDialog from '@/components/TarikDialog';
+import SetorDialog from '@/components/dialog/SetorDialog';
+import TarikDialog from '@/components/dialog/TarikDialog';
 import Header from '@/components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 const DetailSiswa = () => {
   const { id, name } = useLocalSearchParams();
   const [dataSiswa, setDataSiswa] = useState<siswaDetail | null>(null);
@@ -39,10 +36,11 @@ const DetailSiswa = () => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView>
       <Header
         title={`Detail Siswa ${(name as string).split(' ')[0]}`}
         showMenu={true}
+        id={id as unknown as number}
       />
 
       <View style={{ flex: 1 }}>
@@ -148,7 +146,7 @@ const DetailSiswa = () => {
           currTabungan={dataSiswa?.amount as number}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

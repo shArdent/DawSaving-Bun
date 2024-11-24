@@ -2,10 +2,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React from 'react';
 import { siswaDetail } from '@/type/siswaType';
 import { useRouter } from 'expo-router';
-import DotMenu from '@/assets/icons/DotMenu.svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import DetailSiswaCardPopMenu from './DetailSiswaCardPopMenu';
-import { text } from 'drizzle-orm/mysql-core';
 
 const DetailSiswaCard = ({
   siswa,

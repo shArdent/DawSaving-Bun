@@ -1,53 +1,44 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Button,
-  Alert,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, Alert, Pressable } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { siswaSchema, TsiswaSchema } from '@/zschema/siswaZSchema';
 import { useRouter } from 'expo-router';
-import InputField from './InputField';
-import { addNewSiswaHandler } from '@/db/query';
+import InputField from '../InputField';
+import { editSiswaHandler } from '@/db/query';
+import { siswa, siswaDetail } from '@/type/siswaType';
+import { useState } from 'react';
+import ConfirmDialog from '../dialog/ConfirmDialog';
+import SuccessDialog from '../dialog/SuccessDialog';
 
-const AddSiswaForm = () => {
+const EditSiswaForm = ({ data }: { data: siswaDetail }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(siswaSchema),
-    defaultValues: {
-      name: '',
-      nisn: '',
-      class: '',
-    },
+    defaultValues: data
+      ? {
+          name: data.name,
+          nisn: data.nisn,
+          class: data.class,
+        }
+      : {
+          name: '',
+          nisn: '',
+          class: '',
+        },
   });
+
   const router = useRouter();
 
-  const showAlert = (data: TsiswaSchema) => {
-    Alert.alert(
-      'Konfirmasi',
-      'Periksa kembali data Anda apabila kurang yakin!',
-      [
-        {
-          text: 'Batalkan',
-          style: 'cancel',
-        },
-        {
-          text: 'Simpan',
-          onPress: async () => await addNewSiswaHandler(data, router, errors),
-        },
-      ]
-    );
-  };
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
+  const [newData, setNewData] = useState<siswa>(data);
 
-  const onSubmit = (data: TsiswaSchema) => {
-    showAlert(data);
+  const onSubmit = (formData: TsiswaSchema) => {
+    setNewData({ ...formData, id: data.id });
+    setShowConfirmDialog(true);
   };
 
   return (
@@ -140,11 +131,20 @@ const AddSiswaForm = () => {
           Simpan
         </Text>
       </Pressable>
+      <ConfirmDialog
+        visible={showConfirmDialog}
+        setConfirmDialog={setShowConfirmDialog}
+        setSuccessDialog={setShowSuccessDialog}
+        ConfirmHandler={async () =>
+          await editSiswaHandler(newData as any, errors)
+        }
+      />
+      <SuccessDialog label="Data berhasil diubah" visible={showSuccessDialog} />
     </View>
   );
 };
 
-export default AddSiswaForm;
+export default EditSiswaForm;
 
 const styles = StyleSheet.create({
   errorText: {

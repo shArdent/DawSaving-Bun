@@ -63,6 +63,12 @@ function RootLayoutNav() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="EditSiswa"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </SafeAreaView>
       </GestureHandlerRootView>

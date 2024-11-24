@@ -1,7 +1,7 @@
 import db from '@/constants/dbConn';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import Dialog from 'react-native-dialog';
 
 const SetorDialog = ({
@@ -51,18 +51,30 @@ const SetorDialog = ({
       contentStyle={{
         width: '80%',
         borderRadius: 5,
-        gap: 16,
+        gap: 0,
       }}
     >
       <Dialog.Title style={{ color: 'black' }}>
         Masukkan Jumlah Uang Disetor
       </Dialog.Title>
-      <Dialog.Description style={{}}>
-        <View style={{ flexDirection: 'row', width: '100%' }}>
-          <Text style={{ marginTop: 10 }}>Rp. </Text>
-          <Dialog.Input
+      <Dialog.Description
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Text>Rp. </Text>
+          <TextInput
             style={{
-              width: 320,
+              width: '90%',
               color: 'black',
               borderWidth: 1,
               borderRadius: 5,
@@ -74,6 +86,7 @@ const SetorDialog = ({
             onChangeText={(value) => setNominal(Number(value))}
           />
         </View>
+
         {error && <Text style={{ color: 'red' }}>Nominal belum diisi</Text>}
       </Dialog.Description>
       <Dialog.Button

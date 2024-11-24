@@ -1,4 +1,3 @@
-import { siswa } from '@/db/schema';
 import { z } from 'zod'
 
 interface siswa {

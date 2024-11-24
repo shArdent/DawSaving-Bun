@@ -1,18 +1,16 @@
-import { View, Text, Pressable } from 'react-native';
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import AddSiswaForm from '@/components/AddSiswaForm';
+import AddSiswaForm from '@/components/form/AddSiswaForm';
 import Header from '@/components/Header';
 
 const AddNew = () => {
   const router = useRouter();
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView >
       <Header title="Tambah Siswa" />
       <AddSiswaForm />
-    </View>
+    </ScrollView>
   );
 };
 

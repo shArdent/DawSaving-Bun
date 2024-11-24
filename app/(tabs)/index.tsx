@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
   filterInput: {
     backgroundColor: '#FFF',
     padding: 10,
-    height: 37,
+    height: 'auto',
+    minHeight : 37,
     borderRadius: 30,
     borderWidth: 0.3,
     paddingHorizontal: 27,

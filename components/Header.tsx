@@ -1,11 +1,11 @@
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import DetailSiswaCardPopMenu from './detail-siswa/DetailSiswaCardPopMenu';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Header = ({ title, showMenu }: { title: string; showMenu?: boolean }) => {
+const Header = ({ title, showMenu, id }: { title: string; showMenu?: boolean, id? : number }) => {
   const router = useRouter();
 
   return (
@@ -14,6 +14,9 @@ const Header = ({ title, showMenu }: { title: string; showMenu?: boolean }) => {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{
+        position: 'fixed',
+        top : 0,
+        left : 0,
         width: '100%',
         height: 74,
         justifyContent: showMenu ? 'space-between' : 'center',
@@ -33,7 +36,7 @@ const Header = ({ title, showMenu }: { title: string; showMenu?: boolean }) => {
       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
         {title}
       </Text>
-      {showMenu && <DetailSiswaCardPopMenu />}
+      {showMenu && <DetailSiswaCardPopMenu id={id as number}/>}
     </LinearGradient>
   );
 };
