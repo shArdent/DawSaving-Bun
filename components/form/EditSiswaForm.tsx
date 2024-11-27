@@ -4,13 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { siswaSchema, TsiswaSchema } from '@/zschema/siswaZSchema';
 import { useRouter } from 'expo-router';
 import InputField from '../InputField';
-import { editSiswaHandler } from '@/db/query';
-import { siswa, siswaDetail } from '@/type/siswaType';
+import { editSiswaHandler } from '@/libs/query';
+import { Siswa, SiswaDetail } from '@/type/siswaType';
 import { useState } from 'react';
 import ConfirmDialog from '../dialog/ConfirmDialog';
 import SuccessDialog from '../dialog/SuccessDialog';
+import React from 'react';
 
-const EditSiswaForm = ({ data }: { data: siswaDetail }) => {
+const EditSiswaForm = ({ data }: { data: SiswaDetail }) => {
   const {
     control,
     handleSubmit,
@@ -34,7 +35,7 @@ const EditSiswaForm = ({ data }: { data: siswaDetail }) => {
 
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
-  const [newData, setNewData] = useState<siswa>(data);
+  const [newData, setNewData] = useState<Siswa>(data);
 
   const onSubmit = (formData: TsiswaSchema) => {
     setNewData({ ...formData, id: data.id });
@@ -135,11 +136,16 @@ const EditSiswaForm = ({ data }: { data: siswaDetail }) => {
         visible={showConfirmDialog}
         setConfirmDialog={setShowConfirmDialog}
         setSuccessDialog={setShowSuccessDialog}
+        label={'Periksa kembali data Anda apabila kurang yakin!'}
         ConfirmHandler={async () =>
           await editSiswaHandler(newData as any, errors)
         }
       />
-      <SuccessDialog label="Data berhasil diubah" visible={showSuccessDialog} />
+      <SuccessDialog
+        label="Data berhasil diubah"
+        visible={showSuccessDialog}
+        setSuccessVisible={setShowSuccessDialog}
+      />
     </View>
   );
 };

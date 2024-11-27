@@ -1,5 +1,6 @@
 import TabBar from "@/components/tabbar/TabBar";
 import { Tabs } from "expo-router";
+import React from "react";
 
 const TabLayout = () => {
   return (
@@ -9,7 +10,7 @@ const TabLayout = () => {
         options={{ headerShown: false, title: "Daftar Siswa" }}
       />
       <Tabs.Screen
-        name="two"
+        name="history"
         options={{ headerShown: false, title: "Riwayat Menabung " }}
       />
     </Tabs>

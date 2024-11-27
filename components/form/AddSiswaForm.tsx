@@ -2,13 +2,12 @@ import { View, Text, StyleSheet, Alert, Pressable } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { siswaSchema, TsiswaSchema } from '@/zschema/siswaZSchema';
-import { useRouter } from 'expo-router';
 import InputField from '../InputField';
-import { addNewSiswaHandler } from '@/db/query';
+import { addNewSiswaHandler } from '@/libs/query';
 import { useState } from 'react';
 import ConfirmDialog from '../dialog/ConfirmDialog';
 import SuccessDialog from '../dialog/SuccessDialog';
-import { siswa } from '@/type/siswaType';
+import React from 'react';
 
 const AddSiswaForm = () => {
   const {
@@ -23,27 +22,9 @@ const AddSiswaForm = () => {
       class: '',
     },
   });
-  const router = useRouter();
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
   const [newData, setNewData] = useState<TsiswaSchema | null>(null);
-
-  const showAlert = (data: TsiswaSchema) => {
-    Alert.alert(
-      'Konfirmasi',
-      'Periksa kembali data Anda apabila kurang yakin!',
-      [
-        {
-          text: 'Batalkan',
-          style: 'cancel',
-        },
-        {
-          text: 'Simpan',
-          onPress: async () => await addNewSiswaHandler(data, errors),
-        },
-      ]
-    );
-  };
 
   const onSubmit = (data: TsiswaSchema) => {
     setNewData(data);
@@ -115,7 +96,6 @@ const AddSiswaForm = () => {
         />
       </View>
 
-      {/* <Button title="Simpan" onPress={handleSubmit(onSubmit)} /> */}
       <Pressable
         style={{
           backgroundColor: '#292E91',
@@ -145,11 +125,16 @@ const AddSiswaForm = () => {
         visible={showConfirmDialog}
         setConfirmDialog={setShowConfirmDialog}
         setSuccessDialog={setShowSuccessDialog}
+        label={'Periksa kembali data Anda apabila kurang yakin!'}
         ConfirmHandler={async () =>
           await addNewSiswaHandler(newData as any, errors)
         }
       />
-      <SuccessDialog label="Data berhasil ditambahkan" visible={showSuccessDialog} />
+      <SuccessDialog
+        label="Data berhasil ditambahkan"
+        visible={showSuccessDialog}
+        setSuccessVisible={setShowSuccessDialog}
+      />
     </View>
   );
 };

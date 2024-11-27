@@ -1,17 +1,19 @@
 {
   "expo": {
     "name": "Daw Savings",
-    "slug": "Daw Savings",
+    "slug": "DawSavings-bun",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "userInterfaceStyle": "light",
     "ios": {
+      "userInterfaceStyle": "light",
       "supportsTablet": true
     },
     "android": {
+      "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -20,8 +22,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
       "expo-router",
@@ -58,6 +59,11 @@
       "eas": {
         "projectId": "ab237442-e7f8-4e61-a210-2cfb1a72cbbd"
       }
+    },
+    "owner": "divamarshelano",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/ab237442-e7f8-4e61-a210-2cfb1a72cbbd"
     }
   }
 }

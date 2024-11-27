@@ -1,6 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React from 'react';
-import { siswaDetail } from '@/type/siswaType';
+import { SiswaDetail } from '@/type/siswaType';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -8,7 +8,7 @@ const DetailSiswaCard = ({
   siswa,
   index,
 }: {
-  siswa: siswaDetail;
+  siswa: SiswaDetail;
   index: number;
 }) => {
   const router = useRouter();
@@ -60,7 +60,7 @@ export default DetailSiswaCard;
 
 const styles = StyleSheet.create({
   linear: {
-    elevation: 3,
+    // elevation: 3,
     padding: 14,
     height: 130,
     borderRadius: 10,

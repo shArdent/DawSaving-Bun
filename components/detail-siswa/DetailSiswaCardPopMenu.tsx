@@ -6,9 +6,19 @@ import {
 } from 'react-native-popup-menu';
 import DotMenu from '@/assets/icons/DotMenu.svg';
 import { useRouter } from 'expo-router';
+import { useDeleteStore } from '@/store';
+import React from 'react';
 
 const DetailSiswaCardPopMenu = ({ id }: { id: number }) => {
   const router = useRouter();
+
+  const setConfirmDeleteVisible = useDeleteStore(
+    (state: any) => state.setConfirmDeleteVisible
+  );
+
+  const setSuccessDeleteVisible = useDeleteStore(
+    (state: any) => state.setSuccessDeleteVisible
+  );
 
   return (
     <Menu>
@@ -28,11 +38,19 @@ const DetailSiswaCardPopMenu = ({ id }: { id: number }) => {
           },
         }}
       >
-        <MenuOption text="Edit" onSelect={() => router.push({
-          pathname: '/EditSiswa',
-          params: { id },
-        })} />
-        <MenuOption text="Hapus" />
+        <MenuOption
+          text="Edit"
+          onSelect={() =>
+            router.push({
+              pathname: '/EditSiswa',
+              params: { id },
+            })
+          }
+        />
+        <MenuOption
+          text="Hapus"
+          onSelect={() => setConfirmDeleteVisible(true)}
+        />
       </MenuOptions>
     </Menu>
   );

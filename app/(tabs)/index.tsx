@@ -10,24 +10,23 @@ import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native-gesture-handler';
-import { siswaDetail } from '@/type/siswaType';
+import { SiswaDetail } from '@/type/siswaType';
 import DetailSiswaCard from '@/components/detail-siswa/DetailSiswaCard';
-import { init } from '@/db/query';
+import { init } from '@/libs/query';
 import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
 
 const Page = () => {
   const [refreshing, setRefreshing] = useState<boolean>(true);
-  const [students, setStudents] = useState<siswaDetail[]>([]);
+  const [students, setStudents] = useState<SiswaDetail[]>([]);
   const [filteredStudents, setFilteredStudents] =
-    useState<siswaDetail[]>(students);
+    useState<SiswaDetail[]>(students);
 
   const router = useRouter();
-  // const { success, error } = useMigrations(db, migrations);
-
   const handleSearch = (e: string) => {
     const query = e.trim().toLowerCase();
     setFilteredStudents(
-      students.filter((siswa: siswaDetail) =>
+      students.filter((siswa: SiswaDetail) =>
         siswa.name.toLowerCase().includes(query)
       )
     );
@@ -40,6 +39,7 @@ const Page = () => {
   return (
     <View style={{ flex: 1 }}>
       <Pressable
+        testID="add-new"
         style={styles.AddNew}
         onPress={() =>
           router.navigate({
@@ -69,26 +69,27 @@ const Page = () => {
       </LinearGradient>
 
       <View style={{ flex: 1, marginTop: 16, paddingHorizontal: 24 }}>
-        {filteredStudents.length === 0 ? (
-          <View style={{ alignItems: 'center', marginTop: 100 }}>
-            <Text>Belum ada siswa</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={filteredStudents}
-            contentContainerStyle={{ gap: 16, width: '100%' }}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <DetailSiswaCard siswa={item} index={index} key={index} />
-            )}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={() => init(setStudents, setFilteredStudents, setRefreshing)}
-              />
-            }
-          />
-        )}
+        <FlatList
+          data={filteredStudents}
+          contentContainerStyle={{ gap: 16, width: '100%' }}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <DetailSiswaCard siswa={item} index={index} key={index} />
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() =>
+                init(setStudents, setFilteredStudents, setRefreshing)
+              }
+            />
+          }
+          ListEmptyComponent={
+            <Text style={{ textAlign: 'center', marginTop: 100 }}>
+              Belum ada siswa
+            </Text>
+          }
+        />
       </View>
     </View>
   );
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 10,
     height: 'auto',
-    minHeight : 37,
+    minHeight: 37,
     borderRadius: 30,
     borderWidth: 0.3,
     paddingHorizontal: 27,

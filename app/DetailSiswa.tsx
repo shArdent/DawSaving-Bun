@@ -1,25 +1,45 @@
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
-import { useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import db from '@/constants/dbConn';
-import { siswaDetail } from '@/type/siswaType';
+import { SiswaDetail } from '@/type/siswaType';
 import SetorDialog from '@/components/dialog/SetorDialog';
 import TarikDialog from '@/components/dialog/TarikDialog';
 import Header from '@/components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
+import SuccessDialog from '@/components/dialog/SuccessDialog';
+import ConfirmDialog from '@/components/dialog/ConfirmDialog';
+import { useDeleteStore } from '@/store';
+import { deleteSiswaHandler } from '@/libs/query';
+
 const DetailSiswa = () => {
   const { id, name } = useLocalSearchParams();
-  const [dataSiswa, setDataSiswa] = useState<siswaDetail | null>(null);
+  const [dataSiswa, setDataSiswa] = useState<SiswaDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [visibleSetor, setVisibleSetor] = useState<boolean>(false);
   const [visibleTarik, setVisibleTarik] = useState<boolean>(false);
+  const router = useRouter();
+
+  const confirmDeleteVisible = useDeleteStore(
+    (state: any) => state.confirmDeleteVisible
+  );
+  const successDeleteVisible = useDeleteStore(
+    (state: any) => state.successDeleteVisible
+  );
+  const setConfirmDeleteVisible = useDeleteStore(
+    (state: any) => state.setConfirmDeleteVisible
+  );
+
+  const setSuccessDeleteVisible = useDeleteStore(
+    (state: any) => state.setSuccessDeleteVisible
+  );
 
   const getData = async () => {
     const data = await db.getFirstAsync(
       `SELECT * FROM siswa JOIN tabungan ON siswa.id = tabungan.siswaId WHERE tabungan.siswaId = ${id}`
     );
 
-    setDataSiswa(data as siswaDetail);
+    setDataSiswa(data as SiswaDetail);
     setIsLoading(false);
   };
 
@@ -39,7 +59,6 @@ const DetailSiswa = () => {
     <ScrollView>
       <Header
         title={`Detail Siswa ${(name as string).split(' ')[0]}`}
-        showMenu={true}
         id={id as unknown as number}
       />
 
@@ -122,7 +141,18 @@ const DetailSiswa = () => {
               <Text style={styles.buttonText}>TARIK</Text>
             </Pressable>
           </View>
-          <Pressable style={{ height: 'auto' }} onPress={() => {}}>
+          <Pressable
+            style={{ height: 'auto' }}
+            onPress={() =>
+              router.push({
+                pathname: '/HistorySpesifik',
+                params: {
+                  id: dataSiswa?.id,
+                  name: dataSiswa?.name,
+                },
+              })
+            }
+          >
             <LinearGradient
               colors={['#4CA9DF', '#292E91']}
               style={styles.buttonContainer}
@@ -146,6 +176,18 @@ const DetailSiswa = () => {
           currTabungan={dataSiswa?.amount as number}
         />
       </View>
+      <SuccessDialog
+        label="Siswa Berhasil Dihapus"
+        visible={successDeleteVisible}
+        setSuccessVisible={setSuccessDeleteVisible}
+      />
+      <ConfirmDialog
+        label="Apakah anda yakin untuk menghapus siswa ini?"
+        visible={confirmDeleteVisible}
+        ConfirmHandler={async () => await deleteSiswaHandler(Number(id))}
+        setConfirmDialog={setConfirmDeleteVisible}
+        setSuccessDialog={setSuccessDeleteVisible}
+      />
     </ScrollView>
   );
 };

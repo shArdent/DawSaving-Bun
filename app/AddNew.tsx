@@ -1,13 +1,12 @@
-import { ScrollView, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { ScrollView } from 'react-native';
+import React from 'react';
 import AddSiswaForm from '@/components/form/AddSiswaForm';
 import Header from '@/components/Header';
 
 const AddNew = () => {
-  const router = useRouter();
 
   return (
-    <ScrollView >
+    <ScrollView>
       <Header title="Tambah Siswa" />
       <AddSiswaForm />
     </ScrollView>

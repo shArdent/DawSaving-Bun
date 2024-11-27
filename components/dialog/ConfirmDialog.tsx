@@ -1,19 +1,24 @@
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import Dialog from 'react-native-dialog';
 
 const ConfirmDialog = ({
   setConfirmDialog,
   setSuccessDialog,
   ConfirmHandler,
+  label,
   visible,
 }: {
-  setConfirmDialog: (e: boolean) => void;
-  setSuccessDialog: (e: boolean) => void;
+  setConfirmDialog: (e: boolean) => void | ((e: boolean) => Promise<void>);
+  setSuccessDialog: (e: boolean) => void | ((e: boolean) => Promise<void>);
   ConfirmHandler: () => Promise<void>;
+  label: string;
   visible: boolean;
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleConfirm = async () => {
+    setIsLoading(true);
     await ConfirmHandler();
+    setIsLoading(false);
     setConfirmDialog(false);
     setSuccessDialog(true);
   };
@@ -22,9 +27,11 @@ const ConfirmDialog = ({
     <Dialog.Container visible={visible}>
       <Dialog.Title style={{ color: 'black' }}>Konfirmasi</Dialog.Title>
       <Dialog.Description style={{ color: 'black' }}>
-        Periksa kembali data Anda apabila kurang yakin!
+        {label}
       </Dialog.Description>
       <Dialog.Button
+        testID="cancel-button"
+        disabled={isLoading}
         label="Batalkan"
         onPress={() => setConfirmDialog(false)}
         style={{
@@ -35,7 +42,9 @@ const ConfirmDialog = ({
         }}
       />
       <Dialog.Button
-        label="OK"
+        testID="confirm-button"
+        label={isLoading ? 'Loading...' : 'Konfirmasi'}
+        disabled={isLoading}
         style={{
           color: 'white',
           backgroundColor: '#3451A3',

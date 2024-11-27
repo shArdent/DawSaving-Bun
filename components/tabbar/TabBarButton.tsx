@@ -1,10 +1,12 @@
-import { Text, Pressable, StyleSheet } from "react-native";
-import React from "react";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Text, Pressable, StyleSheet } from 'react-native';
+import React from 'react';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const icon: any = {
-  index: (props: any) => <Ionicons name={"list"} size={24} {...props} />,
-  two: (props: any) => <MaterialCommunityIcons name={"history"} size={24} {...props} />,
+  index: (props: any) => <Ionicons name={'list'} size={24} {...props} />,
+  history: (props: any) => (
+    <MaterialCommunityIcons name={'history'} size={24} {...props} />
+  ),
 };
 
 const TabBarButton = ({
@@ -28,13 +30,13 @@ const TabBarButton = ({
     >
       {icon[routeName] &&
         icon[routeName]({
-          color: isFocused ? "#001994" : "#000",
+          color: isFocused ? '#001994' : '#000',
         })}
       <Text
         style={{
-          color: isFocused ? "#001994" : "#000",
-          fontWeight: "bold",
-          textAlign: "center",
+          color: isFocused ? '#001994' : '#000',
+          fontWeight: 'bold',
+          textAlign: 'center',
           fontSize: 12,
         }}
       >
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
   tabBarItem: {
     flex: 1,
     gap: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

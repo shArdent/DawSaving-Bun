@@ -1,12 +1,16 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { View, Text } from 'react-native';
+import React from 'react';
 import Dialog from 'react-native-dialog';
+
+
 
 const SuccessDialog = ({
   visible,
   label,
+  setSuccessVisible
 }: {
+  setSuccessVisible: (e: boolean) => void;
   visible: boolean;
   label: string;
 }) => {
@@ -27,7 +31,10 @@ const SuccessDialog = ({
       <Dialog.Description style={{ color : 'black' }}>{label}</Dialog.Description>
       <Dialog.Button
         label="OK"
-        onPress={() => router.push('/')}
+        onPress={() => {
+          setSuccessVisible(false);
+          router.push('/');
+        }}
         style={{
           color: 'white',
           width : '100%',

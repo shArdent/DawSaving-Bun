@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Header = ({ title, showMenu, id }: { title: string; showMenu?: boolean, id? : number }) => {
+const Header = ({ title, id }: { title: string; id?: number }) => {
   const router = useRouter();
 
   return (
@@ -15,12 +15,12 @@ const Header = ({ title, showMenu, id }: { title: string; showMenu?: boolean, id
       end={{ x: 1, y: 0 }}
       style={{
         position: 'fixed',
-        top : 0,
-        left : 0,
+        top: 0,
+        left: 0,
         width: '100%',
         height: 74,
-        justifyContent: showMenu ? 'space-between' : 'center',
-        gap: showMenu ? 0 : 77,
+        justifyContent: id ? 'space-between' : 'center',
+        gap: id ? 0 : 77,
         alignItems: 'center',
         backgroundColor: '#4CA9DF',
         flexDirection: 'row',
@@ -29,14 +29,14 @@ const Header = ({ title, showMenu, id }: { title: string; showMenu?: boolean, id
     >
       <TouchableOpacity
         onPress={() => router.back()}
-        style={showMenu ? {} : { position: 'absolute', left: 20 }}
+        style={id ? {} : { position: 'absolute', left: 20 }}
       >
         <Ionicons name="arrow-back" size={28} color={'white'} />
       </TouchableOpacity>
       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
         {title}
       </Text>
-      {showMenu && <DetailSiswaCardPopMenu id={id as number}/>}
+      {id && <DetailSiswaCardPopMenu id={id as number} />}
     </LinearGradient>
   );
 };

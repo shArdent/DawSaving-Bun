@@ -1,6 +1,6 @@
 import db from '@/constants/dbConn';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput } from 'react-native';
 import Dialog from 'react-native-dialog';
 
@@ -52,6 +52,7 @@ const SetorDialog = ({
         width: '80%',
         borderRadius: 5,
         gap: 0,
+        backgroundColor: 'white',
       }}
     >
       <Dialog.Title style={{ color: 'black' }}>

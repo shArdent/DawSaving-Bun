@@ -7,6 +7,7 @@ import { SafeAreaView, StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { MenuProvider } from 'react-native-popup-menu';
+import React from 'react';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -46,8 +47,8 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <MenuProvider>
-      <GestureHandlerRootView>
+    <GestureHandlerRootView>
+      <MenuProvider>
         <SafeAreaView
           style={{
             flex: 1,
@@ -64,14 +65,14 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
-              name="EditSiswa"
+              name="HistorySpesifik"
               options={{
                 headerShown: false,
               }}
             />
           </Stack>
         </SafeAreaView>
-      </GestureHandlerRootView>
-    </MenuProvider>
+      </MenuProvider>
+    </GestureHandlerRootView>
   );
 }
