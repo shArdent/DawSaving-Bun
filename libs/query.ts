@@ -53,43 +53,40 @@ export const handleTarik = async (id: number, total: number) => {
 
 }
 
-export const getMenabungLog = async (date: Date, setData: (e: LogSiswa[]) => void, setRefreshing: (e: boolean) => void, id?: number) => {
-    if (id) {
-        if (date) {
-            const nowDate = date.toISOString().split('T')[0];
-            const dataLog = await db.getAllAsync(`
-                SELECT * FROM saving_log JOIN siswa ON saving_log.siswaId = siswa.id WHERE saving_log.createdAt LIKE '%${nowDate}%' AND saving_log.siswaId=${id} ORDER BY saving_log.createdAt DESC`)
-            setData(dataLog as LogSiswa[]);
-            setRefreshing(false);
-            return
-        }
+export const getMenabungLog = async (
+    date: Date,
+    setData: (e: LogSiswa[]) => void,
+    setRefreshing: (e: boolean) => void,
+    id?: number
+) => {
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    
+    let query = `
+        SELECT * FROM saving_log 
+        JOIN siswa ON saving_log.siswaId = siswa.id
+    `;
 
-        const dataLog = await db.getAllAsync(`
-            SELECT * FROM saving_log JOIN siswa ON saving_log.siswaId = siswa.id WHERE saving_log.siswaId=${id} ORDER BY saving_log.createdAt DESC`)
-
-        setData(dataLog as LogSiswa[]);
-        setRefreshing(false);
-        return
+    const conditions = [];
+    if (id) conditions.push(`saving_log.siswaId = ${id}`);
+    if (date) conditions.push(`saving_log.createdAt = '${formatDate(date)}'`);
+    
+    if (conditions.length) {
+        query += ` WHERE ${conditions.join(' AND ')}`;
     }
+    
+    query += ' ORDER BY saving_log.createdAt DESC';
 
-    if (!date) {
-        const dataLog = await db.getAllAsync(
-            'SELECT * FROM saving_log JOIN siswa ON saving_log.siswaId = siswa.id ORDER BY saving_log.createdAt DESC'
-        );
-
+    try {
+        const dataLog = await db.getAllAsync(query);
         setData(dataLog as LogSiswa[]);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        setData([]);
+    } finally {
         setRefreshing(false);
-        return
     }
-
-    const nowDate = date.toISOString().split('T')[0];
-    const dataLog = await db.getAllAsync(
-        `SELECT * FROM saving_log JOIN siswa ON saving_log.siswaId = siswa.id WHERE saving_log.createdAt LIKE '%${nowDate}%' ORDER BY saving_log.createdAt DESC`
-    )
-
-    setData(dataLog as LogSiswa[]);
-    setRefreshing(false);
 };
+
 
 export const timestamp = (date: string) => {
     const namaBulan: Record<string, string> = {

@@ -2,7 +2,11 @@ import { View, Text, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import HistoryHead from './HistoryHead';
 import HistoryCard from './HistoryCard';
-import { FlatList, RefreshControl } from 'react-native-gesture-handler';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+} from 'react-native-gesture-handler';
 import { LogSiswa } from '@/type/siswaType';
 import { useDatePicker } from '@/store';
 import { getMenabungLog } from '@/libs/query';
