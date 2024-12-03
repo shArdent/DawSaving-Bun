@@ -35,7 +35,6 @@ const SetorDialog = ({
         setVisible(false);
         router.push('/');
       } catch (error) {
-        console.log(error);
         setError('Terjadi kesalahan saat menyetor');
       } finally {
         setIsLoading(false);
@@ -84,7 +83,9 @@ const SetorDialog = ({
             placeholder="contoh : 20000"
             underlineColorAndroid={'transparent'}
             keyboardType="number-pad"
-            onChangeText={(value) => setNominal(Number(value))}
+            onChangeText={(value) => {
+              setNominal(Number(value.replace(/[\,\.]/g, '')));
+            }}
           />
         </View>
 

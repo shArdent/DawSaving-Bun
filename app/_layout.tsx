@@ -58,6 +58,7 @@ function RootLayoutNav() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="AddNew" options={{ headerShown: false }} />
+            <Stack.Screen name="EditSiswa" options={{ headerShown: false }} />
             <Stack.Screen
               name="DetailSiswa"
               options={{
