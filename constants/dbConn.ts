@@ -33,21 +33,6 @@ db.execSync(`CREATE TABLE IF NOT EXISTS siswa (
         INSERT INTO 'saving_log' ('siswaId', 'tabunganId', 'addedAmount', 'oldAmount', 'newAmount', 'createdAt') VALUES (new.siswaId, old.id, new.amount - old.amount, old.amount, new.amount, DATETIME('now'));
     END;
 
-        INSERT INTO siswa (name, nisn, class) VALUES 
-        ('Andi', '1234567890', 'XII IPA'),
-        ('Budi', '1234567891', 'XII IPS'),
-        ('Caca', '1234567892', 'XII Bahasa');
-
-        INSERT INTO saving_log (siswaId, tabunganId, addedAmount, oldAmount, newAmount, createdAt) VALUES 
-        (1, 1, 10000, 0, 10000, DATE('now', '-10 day')),
-        (1, 1, 5000, 10000, 15000, DATE('now', '-9 day')),
-        (1, 1, 2000, 15000, 17000, DATE('now', '-8 day')),
-        (2, 2, 5000, 0, 5000, DATE('now', '-10 day')),
-        (2, 2, 10000, 5000, 15000, DATE('now', '-9 day')),
-        (2, 2, 3000, 15000, 18000, DATE('now', '-8 day')),
-        (3, 3, 10000, 0, 10000, DATE('now', '-10 day')),
-        (3, 3, 15000, 10000, 25000, DATE('now', '-9 day')),
-        (3, 3, 5000, 25000, 30000, DATE('now', '-8 day'));
         `);
 
 export default db;
